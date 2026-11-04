@@ -1,0 +1,340 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block nav_contacts %}active{% endblock %}
+{% block title %}महत्त्वाचे संपर्क क्रमांक | ग्रामपंचायत तऱ्हाडी त.त.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== CONTACTS HEADER ===== */
+.contacts-header {
+    background: linear-gradient(135deg, var(--forest-green-dark) 0%, var(--forest-green) 100%);
+    color: #ffffff;
+    padding: 55px 5% 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.contacts-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: var(--cream-bg);
+    border-radius: 50% 50% 0 0;
+}
+
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #f7dfa5;
+    padding: 6px 18px;
+    border-radius: var(--radius-pill);
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    backdrop-filter: blur(4px);
+}
+
+.contacts-header h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.contacts-header p {
+    font-size: 16px;
+    color: #d1e7da;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* 24/7 Universal Emergency Grid */
+.universal-emergency-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.emergency-quick-box {
+    background: #ffffff;
+    border: 2px solid #fecaca;
+    border-radius: var(--radius-md);
+    padding: 18px;
+    text-align: center;
+    box-shadow: var(--shadow-subtle);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.emergency-quick-box:hover {
+    transform: translateY(-3px);
+    border-color: #ef4444;
+}
+
+.quick-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.quick-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 4px;
+}
+
+.quick-phone-btn {
+    display: inline-block;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 18px;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.quick-phone-btn:hover {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+/* Emergency Contacts Section */
+.emergency-section {
+    background: #fff5f5;
+    border: 1.5px solid #fecaca;
+    border-left: 6px solid #ef4444;
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-card);
+}
+
+.emergency-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.emergency-section-header h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #991b1b;
+}
+
+/* Regular GP Section */
+.regular-section {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 40px;
+}
+
+.contact-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 18px;
+}
+
+.contact-card-box {
+    background: var(--card-white);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-card-box:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--forest-green);
+}
+
+.contact-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--agri-green-pale);
+    color: var(--forest-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.emergency-avatar {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.contact-details {
+    flex-grow: 1;
+}
+
+.contact-details h4 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+    margin-bottom: 2px;
+}
+
+.contact-details .desig {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.contact-call-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--forest-green);
+    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.contact-call-btn:hover {
+    background: var(--forest-green-dark);
+}
+
+.contact-call-btn-danger {
+    background: #b91c1c;
+}
+
+.contact-call-btn-danger:hover {
+    background: #991b1b;
+}
+
+@media (max-width: 900px) {
+    .universal-emergency-bar { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .universal-emergency-bar { grid-template-columns: 1fr; }
+    .contact-cards-grid { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<section class="contacts-header">
+    <div data-aos="fade-down">
+        <div class="header-badge">
+            <span>📞</span>
+            <span>तऱ्हाडी त.त. — संपर्क संचिका</span>
+        </div>
+        <h1>महत्त्वाचे व आपत्कालीन संपर्क</h1>
+        <p>
+            ग्रामपंचायत पदाधिकारी, शासकीय अधिकारी, आरोग्य केंद्र आणि २४ तास आपत्कालीन मदतीसाठी थेट फोन क्रमांक.
+        </p>
+    </div>
+</section>
+
+<div class="page-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" data-aos="fade-right">
+        <a href="/">मुख्यपृष्ठ</a>
+        <span>›</span>
+        <span>संपर्क क्रमांक</span>
+    </div>
+
+    <!-- 24/7 Universal Emergency Grid -->
+    <div class="universal-emergency-bar" data-aos="fade-up">
+        <div class="emergency-quick-box card-tilt">
+            <div class="quick-icon">🚑</div>
+            <div class="quick-title">रुग्णवाहिका (Ambulance)</div>
+            <a href="tel:108" class="quick-phone-btn">📞 १०८</a>
+        </div>
+
+        <div class="emergency-quick-box card-tilt">
+            <div class="quick-icon">👮</div>
+            <div class="quick-title">पोलीस नियंत्रण कक्ष</div>
+            <a href="tel:100" class="quick-phone-btn">📞 १००</a>
+        </div>
+
+        <div class="emergency-quick-box card-tilt">
+            <div class="quick-icon">⚡</div>
+            <div class="quick-title">महावितरण वीज तक्रार</div>
+            <a href="tel:18002123435" class="quick-phone-btn" style="font-size:14px;padding:6px 10px;">१८००-२१२-३४३५</a>
+        </div>
+
+        <div class="emergency-quick-box card-tilt">
+            <div class="quick-icon">🚒</div>
+            <div class="quick-title">अग्निशामक दल</div>
+            <a href="tel:101" class="quick-phone-btn">📞 १०१</a>
+        </div>
+    </div>
+
+    <!-- Emergency Contacts from DB -->
+    {% if emergency %}
+    <section class="emergency-section" data-aos="fade-up">
+        <div class="emergency-section-header">
+            <span style="font-size:26px;">🚨</span>
+            <h2>गावपातळीवरील आपत्कालीन संपर्क</h2>
+        </div>
+        <div class="contact-cards-grid">
+            {% for c in emergency %}
+            <div class="contact-card-box card-tilt" style="background:#ffffff;border-color:#fecaca;">
+                <div class="contact-avatar emergency-avatar">🚨</div>
+                <div class="contact-details">
+                    <h4>{{ c.name }}</h4>
+                    <div class="desig">{{ c.designation }}</div>
+                    <a href="tel:{{ c.phone }}" class="contact-call-btn contact-call-btn-danger">
+                        <span>📞 {{ c.phone }}</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Regular Gram Panchayat Contacts from DB -->
+    {% if regular %}
+    <section class="regular-section" data-aos="fade-up">
+        <div class="section-eyebrow">ग्राम प्रशासन</div>
+        <h2 style="font-size:24px;font-weight:800;color:var(--forest-green-dark);margin-top:6px;margin-bottom:20px;">
+            ग्रामपंचायत व शासकीय अधिकारी संपर्क
+        </h2>
+        <div class="contact-cards-grid">
+            {% for c in regular %}
+            <div class="contact-card-box card-tilt">
+                <div class="contact-avatar">👤</div>
+                <div class="contact-details">
+                    <h4>{{ c.name }}</h4>
+                    <div class="desig">{{ c.designation }}</div>
+                    <a href="tel:{{ c.phone }}" class="contact-call-btn">
+                        <span>📞 {{ c.phone }}</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

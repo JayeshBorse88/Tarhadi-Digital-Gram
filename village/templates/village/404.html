@@ -1,0 +1,19 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block title %}पृष्ठ सापडले नाही | ग्रामपंचायत तऱ्हाडी त.त.{% endblock %}
+
+{% block content %}
+<div class="page-container" style="text-align:center;padding:90px 5%;max-width:700px;margin:auto;">
+    <div style="font-size:72px;margin-bottom:16px;" data-aos="zoom-in">🏡</div>
+    <div class="badge badge-gold" style="font-size:14px;padding:6px 18px;margin-bottom:16px;">त्रुटी कोड: ४०४</div>
+    <h1 style="font-size:38px;font-weight:800;color:var(--forest-green-dark);margin-bottom:12px;">हे पृष्ठ उपलब्ध नाही</h1>
+    <p style="color:var(--text-muted);font-size:16px;line-height:1.8;margin-bottom:32px;">
+        आपण शोधत असलेले वेबपेज हलवले गेले असावे किंवा चुकीचा URL पत्ता प्रविष्ट केला असावा. कृपया मुख्यपृष्ठावर जाऊन पुन्हा प्रयत्न करा.
+    </p>
+    <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+        <a class="btn btn-forest" href="/">← मुख्यपृष्ठावर परत जा</a>
+        <a class="btn btn-outline-forest" href="/gramseva/">🏛️ नागरिक सेवा पाहा</a>
+    </div>
+</div>
+{% endblock %}

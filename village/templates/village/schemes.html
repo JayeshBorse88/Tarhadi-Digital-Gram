@@ -1,0 +1,440 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block nav_schemes %}active{% endblock %}
+{% block title %}सरकारी योजना व लाभ | ग्रामपंचायत तऱ्हाडी त.त.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== SCHEMES HERO HEADER ===== */
+.schemes-header {
+    background: linear-gradient(135deg, var(--forest-green-dark) 0%, var(--forest-green) 100%);
+    color: #ffffff;
+    padding: 55px 5% 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.schemes-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: var(--cream-bg);
+    border-radius: 50% 50% 0 0;
+}
+
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #f7dfa5;
+    padding: 6px 18px;
+    border-radius: var(--radius-pill);
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    backdrop-filter: blur(4px);
+}
+
+.schemes-header h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.schemes-header p {
+    font-size: 16px;
+    color: #d1e7da;
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* Search and Filter Controls */
+.schemes-control-panel {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin: -25px auto 35px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    z-index: 10;
+}
+
+.search-input-wrap {
+    position: relative;
+    margin-bottom: 18px;
+}
+
+.search-input-wrap input {
+    width: 100%;
+    padding: 14px 20px 14px 48px;
+    border: 2px solid var(--border-subtle);
+    border-radius: var(--radius-pill);
+    font-size: 15px;
+    font-family: inherit;
+    background: var(--cream-bg);
+    transition: all 0.2s ease;
+}
+
+.search-input-wrap input:focus {
+    outline: none;
+    background: #ffffff;
+    border-color: var(--forest-green);
+    box-shadow: 0 0 0 4px rgba(14, 71, 42, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: var(--text-muted);
+}
+
+.filter-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.filter-pill {
+    background: var(--cream-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    padding: 7px 16px;
+    border-radius: var(--radius-pill);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.filter-pill:hover {
+    border-color: var(--forest-green);
+    color: var(--forest-green);
+}
+
+.filter-pill.active {
+    background: var(--forest-green);
+    color: #ffffff;
+    border-color: var(--forest-green);
+}
+
+/* Schemes Grid */
+.schemes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 26px;
+    margin-bottom: 45px;
+}
+
+.scheme-card {
+    background: var(--card-white);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    position: relative;
+}
+
+.scheme-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: #cbd5cb;
+}
+
+.scheme-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.scheme-icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: var(--agri-green-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+}
+
+.scheme-tags {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.scheme-card h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.scheme-card .scheme-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+/* Detail Section Inside Card */
+.scheme-info-table {
+    background: var(--cream-surface);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.info-item {
+    margin-bottom: 8px;
+}
+
+.info-item:last-child { margin-bottom: 0; }
+
+.info-item strong {
+    color: var(--forest-green-dark);
+    display: block;
+    font-size: 12.5px;
+    margin-bottom: 2px;
+}
+
+.info-item span {
+    color: var(--text-main);
+}
+
+.scheme-card-footer {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+/* Official Portal Advisory */
+.gov-warning-box {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-left: 5px solid var(--gold-accent);
+    border-radius: var(--radius-md);
+    padding: 22px 26px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.gov-warning-box h4 {
+    color: #92400e;
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gov-warning-box p {
+    font-size: 14px;
+    color: #78350f;
+    line-height: 1.8;
+}
+
+.empty-schemes {
+    display: none;
+    text-align: center;
+    padding: 50px 20px;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+}
+
+@media (max-width: 768px) {
+    .schemes-grid { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<section class="schemes-header">
+    <div data-aos="fade-down">
+        <div class="header-badge">
+            <span>🏛️</span>
+            <span>केंद्र व महाराष्ट्र शासन योजना दालन</span>
+        </div>
+        <h1>शासकीय योजना व थेट लाभार्थी सुविधा</h1>
+        <p>
+            शेतकरी सन्मान, आवास घरकुल, जन आरोग्य, समाजकल्याण आणि कृषी अनुदानाच्या सर्व योजनांची पात्रता,
+            आवश्यक कागदपत्रे आणि थेट अधिकृत अर्ज पोर्टल.
+        </p>
+    </div>
+</section>
+
+<div class="page-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" data-aos="fade-right">
+        <a href="/">मुख्यपृष्ठ</a>
+        <span>›</span>
+        <span>शासकीय योजना</span>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="schemes-control-panel" data-aos="fade-up">
+        <div class="search-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="schemeSearch" oninput="applyFilters()" placeholder="योजना शोधा (उदा. किसान, घरकुल, आयुष्मान, शेतकरी, सिंचन...)" autocomplete="off">
+        </div>
+
+        <div class="filter-pills-row">
+            <span style="font-size:13px;font-weight:700;color:var(--forest-green-dark);margin-right:6px;">वर्गवारी:</span>
+            <button class="filter-pill active" onclick="setCategoryFilter('all', this)">सर्व योजना ({{ schemes|length }})</button>
+            <button class="filter-pill" onclick="setCategoryFilter('केंद्र शासन', this)">केंद्र शासन</button>
+            <button class="filter-pill" onclick="setCategoryFilter('महाराष्ट्र शासन', this)">महाराष्ट्र शासन</button>
+            <button class="filter-pill" onclick="setCategoryFilter('शेतकरी', this)">🌾 शेतकरी</button>
+            <button class="filter-pill" onclick="setCategoryFilter('घरकुल', this)">🏠 घरकुल</button>
+            <button class="filter-pill" onclick="setCategoryFilter('आरोग्य', this)">🏥 आरोग्य</button>
+            <button class="filter-pill" onclick="setCategoryFilter('महिला व बाल', this)">👧 महिला व बाल</button>
+            <button class="filter-pill" onclick="setCategoryFilter('सामाजिक न्याय', this)">🤝 सामाजिक न्याय</button>
+        </div>
+    </div>
+
+    <!-- Schemes Grid -->
+    <div class="schemes-grid" id="schemesGrid">
+        {% for scheme in schemes %}
+        <div class="scheme-card card-tilt"
+             data-name="{{ scheme.name|lower }}"
+             data-gov="{{ scheme.gov_type }}"
+             data-category="{{ scheme.category }}"
+             data-desc="{{ scheme.description|lower }}"
+             data-aos="fade-up">
+
+            <div class="scheme-card-header">
+                <div class="scheme-icon-box">{{ scheme.icon }}</div>
+                <div class="scheme-tags">
+                    <span class="badge badge-green">{{ scheme.gov_type }}</span>
+                    <span class="badge badge-gold">{{ scheme.category }}</span>
+                </div>
+            </div>
+
+            <h3>{{ scheme.name }}</h3>
+            <p class="scheme-desc">{{ scheme.description }}</p>
+
+            <div class="scheme-info-table">
+                <div class="info-item">
+                    <strong>🎯 पात्रता:</strong>
+                    <span>{{ scheme.eligibility }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>📋 आवश्यक कागदपत्रे:</strong>
+                    <span>{{ scheme.documents }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>📝 अर्ज प्रक्रिया:</strong>
+                    <span>{{ scheme.instructions }}</span>
+                </div>
+            </div>
+
+            <div class="scheme-card-footer">
+                <a class="btn btn-forest btn-block" href="{{ scheme.url }}" target="_blank" rel="noopener noreferrer">
+                    <span>अधिकृत पोर्टलवर अर्ज करा ↗</span>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <p>सध्या योजनांची माहिती उपलब्ध नाही.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Empty Search State -->
+    <div class="empty-schemes" id="emptyState">
+        <div style="font-size:42px;margin-bottom:12px;">🔍</div>
+        <h3 style="font-size:20px;font-weight:700;color:var(--forest-green-dark);margin-bottom:6px;">एकही योजना सापडली नाही</h3>
+        <p style="color:var(--text-muted);font-size:14px;">कृपया दुसरा शब्द टाकून शोधा किंवा 'सर्व योजना' फिल्टर निवडा.</p>
+    </div>
+
+    <!-- Official Advisory Warning Box -->
+    <div class="gov-warning-box" data-aos="fade-up">
+        <h4>
+            <span>⚠️</span>
+            <span>नागरिकांसाठी महत्त्वाची शासकीय दक्षता सूचना:</span>
+        </h4>
+        <p>
+            ही वेबसाइट तऱ्हाडी गावातील नागरिकांना शासकीय योजनांची अचूक माहिती देण्यासाठी आहे. योजनांचा प्रत्यक्ष लाभ शासन नियमांनुसार पात्रतेवर अवलंबून असतो.
+            कोणत्याही योजनेसाठी फक्त अधिकृत शासकीय संकेतस्थळांवर (उदा. MahaDBT, PM-Kisan, PMAY-G) किंवा अधिकृत सेतू / CSC केंद्रामार्फतच अर्ज करा.
+            अनोळखी व्यक्तीला आपला बँक पासवर्ड, OTP किंवा आधार तपशील कधीही देऊ नका.
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+var currentCategory = 'all';
+
+function setCategoryFilter(category, btnElement) {
+    currentCategory = category;
+    var pills = document.querySelectorAll('.filter-pill');
+    pills.forEach(function(p) { p.classList.remove('active'); });
+    btnElement.classList.add('active');
+    applyFilters();
+}
+
+function applyFilters() {
+    var searchVal = document.getElementById('schemeSearch').value.trim().toLowerCase();
+    var cards = document.querySelectorAll('.scheme-card');
+    var visibleCount = 0;
+
+    cards.forEach(function(card) {
+        var name = card.getAttribute('data-name') || '';
+        var gov = card.getAttribute('data-gov') || '';
+        var cat = card.getAttribute('data-category') || '';
+        var desc = card.getAttribute('data-desc') || '';
+
+        // Match Category / Gov Filter
+        var categoryMatches = (currentCategory === 'all') ||
+                              (gov.includes(currentCategory)) ||
+                              (cat.includes(currentCategory));
+
+        // Match Search Query
+        var searchMatches = (searchVal === '') ||
+                            name.includes(searchVal) ||
+                            gov.toLowerCase().includes(searchVal) ||
+                            cat.toLowerCase().includes(searchVal) ||
+                            desc.includes(searchVal);
+
+        if (categoryMatches && searchMatches) {
+            card.style.display = 'flex';
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    var emptyState = document.getElementById('emptyState');
+    if (emptyState) {
+        emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+}
+</script>
+{% endblock %}

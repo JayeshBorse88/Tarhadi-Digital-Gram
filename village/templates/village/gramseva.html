@@ -1,0 +1,701 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block nav_gramseva %}active{% endblock %}
+{% block title %}ग्रामपंचायत नागरी सेवा | तऱ्हाडी डिजिटल ग्राम, ता. शिरपूर{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== GRAMSEVA HERO HEADER ===== */
+.gramseva-header {
+    background: linear-gradient(135deg, var(--forest-green-dark) 0%, var(--forest-green) 100%);
+    color: #ffffff;
+    padding: 55px 5% 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.gramseva-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: var(--cream-bg);
+    border-radius: 50% 50% 0 0;
+}
+
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #f7dfa5;
+    padding: 6px 18px;
+    border-radius: var(--radius-pill);
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    backdrop-filter: blur(4px);
+}
+
+.gramseva-header h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.gramseva-header p {
+    font-size: 16px;
+    color: #d1e7da;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* Category Filter Pills */
+.filter-bar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 32px 0 24px;
+}
+
+.filter-btn {
+    background: var(--card-white);
+    border: 1.5px solid var(--border-subtle);
+    color: var(--text-muted);
+    padding: 10px 20px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.filter-btn:hover {
+    border-color: var(--forest-green);
+    color: var(--forest-green);
+}
+
+.filter-btn.active {
+    background: var(--forest-green);
+    color: #ffffff;
+    border-color: var(--forest-green);
+    box-shadow: 0 4px 12px rgba(14, 71, 42, 0.2);
+}
+
+/* Service Distinction Legend */
+.legend-box {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px 22px;
+    margin-bottom: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.legend-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--forest-green-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-items {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+}
+
+.legend-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+/* Services Grid & Cards */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 26px;
+    margin-bottom: 55px;
+}
+
+.service-box {
+    background: var(--card-white);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-box:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: #cbd5cb;
+}
+
+.service-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.service-icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--agri-green-pale);
+    color: var(--forest-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+}
+
+.service-badge-indicator {
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 11.5px;
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.badge-info-guidance {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.badge-online-live {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.badge-office-direct {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+.service-box h3 {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+    margin-bottom: 8px;
+    line-height: 1.35;
+}
+
+.service-box .time-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--gold-accent);
+    background: var(--gold-pale);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+}
+
+.service-box .service-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 18px;
+}
+
+/* Accordion: Documents & Process */
+.service-details {
+    margin-top: auto;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 16px;
+}
+
+.details-summary {
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--forest-green);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    padding: 6px 0;
+}
+
+.details-summary:hover {
+    color: var(--forest-green-dark);
+}
+
+.details-content {
+    padding: 12px 0 6px;
+    font-size: 13.5px;
+    color: var(--text-main);
+}
+
+.doc-list {
+    list-style: none;
+    margin: 8px 0 14px;
+    padding-left: 0;
+}
+
+.doc-list li {
+    padding: 4px 0 4px 22px;
+    position: relative;
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+.doc-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 2px;
+    color: var(--agri-green);
+    font-weight: bold;
+}
+
+.process-box {
+    background: var(--cream-surface);
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text-main);
+    margin-top: 8px;
+    border-left: 3px solid var(--forest-green);
+}
+
+.service-action-btn {
+    margin-top: 16px;
+}
+
+/* ===== 3. DOWNLOADABLE FORMS SECTION ===== */
+.forms-section {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    margin-bottom: 50px;
+    box-shadow: var(--shadow-card);
+}
+
+.forms-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.forms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.form-item-card {
+    background: var(--cream-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.form-item-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--forest-green);
+}
+
+.form-item-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.form-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.form-item-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--forest-green-dark);
+    line-height: 1.35;
+    margin-bottom: 4px;
+}
+
+.form-item-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.form-badge-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--forest-green);
+    margin-top: 10px;
+}
+
+/* ===== 4. OFFICE HOURS & CONTACT CARD ===== */
+.office-info-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 28px;
+    margin-bottom: 40px;
+}
+
+.office-info-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-card);
+}
+
+.office-info-card h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--border-subtle);
+    font-size: 14px;
+}
+
+.info-row:last-child { border-bottom: none; }
+
+.info-row-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    color: var(--forest-green);
+}
+
+.info-row-title {
+    font-weight: 700;
+    color: var(--forest-green-dark);
+    margin-bottom: 2px;
+}
+
+.info-row-text {
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.office-cta-box {
+    background: linear-gradient(135deg, var(--forest-green), #166534);
+    color: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+}
+
+.office-cta-box h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+.office-cta-box p {
+    font-size: 14px;
+    color: #d8e8de;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+    .office-info-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .legend-box { flex-direction: column; align-items: flex-start; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 1. Header -->
+<section class="gramseva-header">
+    <div data-aos="fade-down">
+        <div class="header-badge">
+            <span>🏛️</span>
+            <span>ग्रामपंचायत तऱ्हाडी त.त. नागरी सेवा कक्ष</span>
+        </div>
+        <h1>नागरिक सेवा व दाखले माहिती</h1>
+        <p>
+            जन्म-मृत्यू प्रमाणपत्रे, रहिवासी दाखला, घरपट्टी, पाणीपट्टी आणि शासकीय अर्जांची अधिकृत माहिती.
+            आपल्या वेळेची बचत करा आणि पारदर्शक सेवेचा लाभ घ्या.
+        </p>
+    </div>
+</section>
+
+<div class="page-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" data-aos="fade-right">
+        <a href="/">मुख्यपृष्ठ</a>
+        <span>›</span>
+        <span>ग्रामसेवा व नागरी दाखले</span>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="filter-bar" data-aos="fade-up">
+        <button class="filter-btn active" onclick="filterServices('all', this)">🏛️ सर्व सेवा ({{ services|length }})</button>
+        <button class="filter-btn" onclick="filterServices('नागरी दाखले', this)">📋 नागरी दाखले</button>
+        <button class="filter-btn" onclick="filterServices('कर व महसूल', this)">🏠 कर व महसूल</button>
+        <button class="filter-btn" onclick="filterServices('डिजिटल सेवा', this)">💻 थेट ऑनलाइन सुविधा</button>
+    </div>
+
+    <!-- Clear Distinction Legend (Citizen Transparency Requirement) -->
+    <div class="legend-box" data-aos="fade-up">
+        <div class="legend-title">
+            <span>ℹ️</span>
+            <span>सेवा प्रकार स्पष्टीकरण:</span>
+        </div>
+        <div class="legend-items">
+            <span class="legend-tag">
+                <span class="service-badge-indicator badge-online-live">थेट ऑनलाइन सुविधा</span>
+                <span>= वेबसाइटवरून थेट अर्ज व ट्रॅकिंग</span>
+            </span>
+            <span class="legend-tag">
+                <span class="service-badge-indicator badge-info-guidance">माहिती व अर्ज मार्गदर्शन</span>
+                <span>= आवश्यक कागदपत्रांसह ग्रामपंचायतीत सादर</span>
+            </span>
+            <span class="legend-tag">
+                <span class="service-badge-indicator badge-office-direct">थेट ग्रामपंचायत कार्यालय</span>
+                <span>= कार्यालयात प्रत्यक्ष पावती व तपासणी</span>
+            </span>
+        </div>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="services-grid" id="servicesGrid">
+        {% for s in services %}
+        <div class="service-box card-tilt" id="{{ s.id }}" data-category="{{ s.category }}" data-aos="fade-up">
+            <div class="service-box-header">
+                <div class="service-icon-wrap">{{ s.icon }}</div>
+                <div>
+                    {% if s.is_online %}
+                        <span class="service-badge-indicator badge-online-live">🟢 {{ s.badge }}</span>
+                    {% elif "कर" in s.category %}
+                        <span class="service-badge-indicator badge-office-direct">🏛️ {{ s.badge }}</span>
+                    {% else %}
+                        <span class="service-badge-indicator badge-info-guidance">📋 {{ s.badge }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <h3>{{ s.name }}</h3>
+
+            <div class="time-info">
+                <span>⏱️ अपेक्षित कालावधी:</span>
+                <span>{{ s.time_limit }}</span>
+            </div>
+
+            <p class="service-desc">{{ s.description }}</p>
+
+            <!-- Collapsible Documents & Procedure -->
+            <div class="service-details">
+                <details>
+                    <summary class="details-summary">
+                        <span>📄 आवश्यक कागदपत्रे व अर्ज प्रक्रिया</span>
+                        <span>▼</span>
+                    </summary>
+                    <div class="details-content">
+                        <strong>आवश्यक कागदपत्रांची यादी:</strong>
+                        <ul class="doc-list">
+                            {% for doc in s.documents %}
+                            <li>{{ doc }}</li>
+                            {% endfor %}
+                        </ul>
+
+                        <strong>कार्यपद्धती:</strong>
+                        <div class="process-box">
+                            {{ s.process }}
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Action Button -->
+            <div class="service-action-btn">
+                {% if s.is_online %}
+                    <a href="{{ s.portal_url }}" class="btn btn-forest btn-block">
+                        <span>{{ s.portal_name }}</span>
+                    </a>
+                {% elif s.portal_url %}
+                    <a href="{{ s.portal_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-forest btn-block">
+                        <span>{{ s.portal_name }} उघडा ↗</span>
+                    </a>
+                {% else %}
+                    <a href="tel:8806846175" class="btn btn-outline-forest btn-block">
+                        <span>📞 ग्रामपंचायत कार्यालयाशी संपर्क</span>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Downloadable Village Forms Section -->
+    <section class="forms-section" data-aos="fade-up">
+        <div class="forms-section-header">
+            <div>
+                <div class="section-eyebrow">अर्ज नमुने</div>
+                <h2 style="font-size:24px;font-weight:800;color:var(--forest-green-dark);margin-top:6px;">ग्रामपंचायत विहित नमुना अर्ज</h2>
+                <p style="font-size:14px;color:var(--text-muted);margin-top:4px;">नागरिकांना कामासाठी लागणारे नमुना अर्ज ग्रामपंचायत कार्यालयात मोफत उपलब्ध आहेत.</p>
+            </div>
+            <a href="tel:8806846175" class="btn btn-outline-forest" style="padding:8px 18px;font-size:14px;">
+                📞 अर्ज माहितीसाठी कॉल करा
+            </a>
+        </div>
+
+        <div class="forms-grid">
+            {% for f in forms %}
+            <div class="form-item-card card-tilt">
+                <div>
+                    <div class="form-item-top">
+                        <div class="form-icon">{{ f.icon }}</div>
+                        <div>
+                            <h4>{{ f.title }}</h4>
+                        </div>
+                    </div>
+                    <p>{{ f.desc }}</p>
+                </div>
+                <div class="form-badge-action">
+                    <span>🏛️ ग्रामपंचायत कार्यालयात उपलब्ध</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Office Hours & Information Card -->
+    <div class="office-info-grid" data-aos="fade-up">
+        <div class="office-info-card">
+            <h3>
+                <span>🏢</span>
+                <span>ग्रामपंचायत कार्यालयीन वेळ व पत्ता</span>
+            </h3>
+
+            <div class="info-row">
+                <div class="info-row-icon">⏰</div>
+                <div>
+                    <div class="info-row-title">कार्यालयीन वेळ</div>
+                    <div class="info-row-text">{{ office_info.timing }}</div>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-row-icon">🗓️</div>
+                <div>
+                    <div class="info-row-title">कार्यालयीन सुट्ट्या</div>
+                    <div class="info-row-text">{{ office_info.holiday }}</div>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-row-icon">📍</div>
+                <div>
+                    <div class="info-row-title">कार्यालयाचा पत्ता</div>
+                    <div class="info-row-text">{{ office_info.address }}</div>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-row-icon">✉️</div>
+                <div>
+                    <div class="info-row-title">अधिकृत ई-मेल</div>
+                    <div class="info-row-text">{{ office_info.email }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="office-cta-box">
+            <h3>काही अडचण किंवा तक्रार आहे का?</h3>
+            <p>
+                पाणी, रस्ता, स्वच्छता किंवा इतर समस्या असल्यास कार्यालयात येण्याची गरज नाही. आपण घरबसल्या ऑनलाइन तक्रार नोंदवू शकता.
+            </p>
+            <a href="/complaints/" class="btn btn-gold" style="width:100%;">
+                <span>📝 ऑनलाइन तक्रार नोंदवा</span>
+            </a>
+            <a href="/takrar-status/" style="color:#ffffff;text-decoration:underline;font-size:13px;margin-top:14px;display:inline-block;">
+                तक्रारीची सद्यस्थिती तपासा →
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function filterServices(category, btnElement) {
+    // 1. Update active button
+    var buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(function(b) { b.classList.remove('active'); });
+    btnElement.classList.add('active');
+
+    // 2. Filter service cards
+    var cards = document.querySelectorAll('.service-box');
+    cards.forEach(function(card) {
+        var cardCat = card.getAttribute('data-category');
+        if (category === 'all') {
+            card.style.display = 'flex';
+        } else if (cardCat === category) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

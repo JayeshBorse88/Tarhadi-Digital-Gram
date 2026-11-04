@@ -1,0 +1,318 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block nav_complaint %}active{% endblock %}
+{% block title %}ऑनलाइन तक्रार निवारण कक्ष | ग्रामपंचायत तऱ्हाडी त.त.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== COMPLAINT HEADER ===== */
+.complaint-header {
+    background: linear-gradient(135deg, var(--forest-green-dark) 0%, var(--forest-green) 100%);
+    color: #ffffff;
+    padding: 55px 5% 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.complaint-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: var(--cream-bg);
+    border-radius: 50% 50% 0 0;
+}
+
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #f7dfa5;
+    padding: 6px 18px;
+    border-radius: var(--radius-pill);
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    backdrop-filter: blur(4px);
+}
+
+.complaint-header h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.complaint-header p {
+    font-size: 16px;
+    color: #d1e7da;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* Complaint Form Card */
+.form-card {
+    background: var(--card-white);
+    max-width: 680px;
+    margin: -25px auto 40px;
+    padding: 36px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-subtle);
+    position: relative;
+    z-index: 10;
+}
+
+.form-card-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+    margin-bottom: 8px;
+}
+
+.form-card-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+/* Official Receipt */
+.receipt-box {
+    background: #f0fdf4;
+    border: 2px solid #86efac;
+    border-radius: var(--radius-md);
+    padding: 28px;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.receipt-icon {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.receipt-box h2 {
+    color: #166534;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.complaint-id-box {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+    letter-spacing: 2px;
+    background: #ffffff;
+    border: 2px dashed #166534;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    display: inline-block;
+    margin: 14px 0;
+    font-family: 'Plus Jakarta Sans', monospace;
+}
+
+.receipt-table {
+    text-align: left;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px dashed #bbf7d0;
+}
+
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 14.5px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.receipt-row:last-child { border-bottom: none; }
+.receipt-row strong { color: var(--forest-green-dark); }
+.receipt-row span { color: var(--text-main); font-weight: 600; }
+
+.receipt-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.receipt-actions .btn { flex: 1; }
+
+/* Alert */
+.alert-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    padding: 14px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Print Friendly Styles */
+@media print {
+    .site-header, .site-footer, .breadcrumb, .whatsapp-float, .back-to-top, .receipt-actions, .complaint-header, .top-strip {
+        display: none !important;
+    }
+    .page-container { padding: 0 !important; }
+    .form-card {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+    .receipt-box {
+        border: 2px solid #000 !important;
+        background: #fff !important;
+    }
+    .complaint-id-box {
+        border: 2px solid #000 !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<section class="complaint-header">
+    <div data-aos="fade-down">
+        <div class="header-badge">
+            <span>📝</span>
+            <span>डिजिटल तक्रार निवारण व्यासपीठ</span>
+        </div>
+        <h1>ऑनलाइन तक्रार नोंदणी</h1>
+        <p>
+            पाणीपुरवठा, रस्ते, स्वच्छता, पथदिवे किंवा ग्रामपंचायत प्रशासनाशी संबंधित समस्यांची तक्रार डिजिटल पद्धतीने थेट नोंदवा.
+        </p>
+    </div>
+</section>
+
+<div class="page-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" data-aos="fade-right">
+        <a href="/">मुख्यपृष्ठ</a>
+        <span>›</span>
+        <span>ऑनलाइन तक्रार</span>
+    </div>
+
+    <!-- Main Card -->
+    <div class="form-card card-tilt" data-aos="fade-up">
+        {% if saved_complaint %}
+        <!-- Official Printable Receipt -->
+        <div class="receipt-box" id="printReceipt">
+            <div class="receipt-icon">✅</div>
+            <h2>आपली तक्रार यशस्वीरीत्या नोंदवली गेली आहे!</h2>
+            <p style="font-size:14px;color:var(--text-muted);">कृपया खालील तक्रार नोंदणी क्रमांक (Complaint ID) जपून ठेवा:</p>
+
+            <div class="complaint-id-box">{{ saved_complaint.complaint_id }}</div>
+
+            <div class="receipt-table">
+                <div class="receipt-row">
+                    <strong>तक्रारदाराचे नाव:</strong>
+                    <span>{{ saved_complaint.name }}</span>
+                </div>
+                <div class="receipt-row">
+                    <strong>नोंदणीकृत मोबाइल:</strong>
+                    <span>{{ saved_complaint.mobile }}</span>
+                </div>
+                <div class="receipt-row">
+                    <strong>तक्रारीचा प्रकार:</strong>
+                    <span>{{ saved_complaint.get_category_display }}</span>
+                </div>
+                <div class="receipt-row">
+                    <strong>सध्याची स्थिती:</strong>
+                    <span class="badge badge-gold">{{ saved_complaint.get_status_display }}</span>
+                </div>
+                <div class="receipt-row">
+                    <strong>नोंदणी दिनांक व वेळ:</strong>
+                    <span>{{ saved_complaint.created_at|date:"d-m-Y, h:i A" }}</span>
+                </div>
+            </div>
+
+            <p style="font-size:13px;color:var(--text-muted);margin-top:16px;">
+                ग्रामपंचायत तऱ्हाडी त.त. कार्यालयाकडून आपल्या समस्येची दखल घेऊन लवकरच निवारण केले जाईल.
+            </p>
+        </div>
+
+        <div class="receipt-actions">
+            <button onclick="window.print()" class="btn btn-outline-forest">
+                <span>🖨️ पावती प्रिंट करा</span>
+            </button>
+            <a href="{% url 'complaint_track' %}" class="btn btn-forest">
+                <span>🔍 तक्रार ट्रॅक करा</span>
+            </a>
+        </div>
+        <a href="{% url 'complaint' %}" class="btn btn-outline-forest btn-block" style="margin-top:12px;">
+            <span>+ नवीन तक्रार नोंदवा</span>
+        </a>
+
+        {% else %}
+        <!-- Complaint Submission Form -->
+        <h2 class="form-card-title">नागरिक तक्रार अर्ज</h2>
+        <p class="form-card-subtitle">
+            आपली माहिती गोपनीय ठेवली जाते व तक्रार थेट संबंधित विभागाकडे वर्ग केली जाते. सर्व रकाने भरणे आवश्यक आहे.
+        </p>
+
+        {% if error %}
+        <div class="alert-box">
+            <span>⚠️ {{ error }}</span>
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'complaint' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label" for="id_name">तक्रारदाराचे पूर्ण नाव *</label>
+                <input class="form-input" id="id_name" name="name" maxlength="100" required placeholder="आपले पूर्ण नाव लिहा (उदा. जयेश बोरसे)">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_mobile">१० अंकी मोबाइल नंबर *</label>
+                <input class="form-input" id="id_mobile" name="mobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="आपला १० अंकी मोबाइल नंबर (उदा. 98XXXXXXXX)">
+                <span style="font-size:12px;color:var(--text-dim);margin-top:4px;display:block;">या नंबरवर तक्रारीची सद्यस्थिती तपासता येईल.</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_category">समस्येचा प्रकार *</label>
+                <select class="form-input" id="id_category" name="category" required style="cursor:pointer;">
+                    <option value="">प्रकार निवडा...</option>
+                    <option value="water">💧 पिण्याच्या पाण्याचा प्रश्न / नळ गळती</option>
+                    <option value="road">🛣️ रस्ता दुरुस्ती / गटारीची समस्या</option>
+                    <option value="electricity">💡 पथदिवे (Street Lights) / वीज समस्या</option>
+                    <option value="cleanliness">🧹 गाव स्वच्छता व कचरा व्यवस्थापन</option>
+                    <option value="other">📋 इतर प्रशासकीय समस्या</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_description">समस्येची सविस्तर माहिती व ठिकाण *</label>
+                <textarea class="form-input" id="id_description" name="description" rows="5" required placeholder="तक्रारीचे ठिकाण, गल्लीचे नाव आणि समस्येचे स्वरूप सविस्तर लिहा..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-forest btn-block" style="padding:14px;font-size:16px;">
+                <span>📝 तक्रार सबमिट करा</span>
+            </button>
+        </form>
+
+        <div style="text-align:center;margin-top:20px;padding-top:18px;border-top:1px solid var(--border-subtle);">
+            <span style="font-size:14px;color:var(--text-muted);">आधी तक्रार नोंदवली आहे का?</span>
+            <a href="{% url 'complaint_track' %}" style="color:var(--forest-green);font-weight:700;margin-left:6px;text-decoration:none;">
+                येथे स्थिती तपासा →
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

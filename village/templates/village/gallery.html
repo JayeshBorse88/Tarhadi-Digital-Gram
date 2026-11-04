@@ -1,0 +1,282 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block nav_gallery %}active{% endblock %}
+{% block title %}फोटो व विकास कामे गॅलरी | ग्रामपंचायत तऱ्हाडी त.त.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== GALLERY HEADER ===== */
+.gallery-header {
+    background: linear-gradient(135deg, var(--forest-green-dark) 0%, var(--forest-green) 100%);
+    color: #ffffff;
+    padding: 55px 5% 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: var(--cream-bg);
+    border-radius: 50% 50% 0 0;
+}
+
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #f7dfa5;
+    padding: 6px 18px;
+    border-radius: var(--radius-pill);
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    backdrop-filter: blur(4px);
+}
+
+.gallery-header h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.gallery-header p {
+    font-size: 16px;
+    color: #d1e7da;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* Gallery Grid */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 50px;
+}
+
+.gallery-item {
+    background: var(--card-white);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.gallery-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.gallery-thumb-wrap {
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+    position: relative;
+    background: #e2e8f0;
+}
+
+.gallery-thumb-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover .gallery-thumb-wrap img {
+    transform: scale(1.04);
+}
+
+.gallery-overlay-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    background: rgba(14, 71, 42, 0.85);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    backdrop-filter: blur(4px);
+}
+
+.gallery-caption {
+    padding: 18px 20px;
+    flex-grow: 1;
+}
+
+.gallery-caption h3 {
+    font-size: 16.5px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+    margin-bottom: 6px;
+}
+
+.gallery-caption p {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+/* Lightbox Modal */
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.lightbox.active { display: flex; }
+
+.lightbox-content {
+    max-width: 900px;
+    max-height: 88vh;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    position: relative;
+    text-align: center;
+}
+
+.lightbox-content img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 12px;
+    display: block;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    color: white;
+    font-size: 34px;
+    cursor: pointer;
+    background: rgba(0,0,0,0.5);
+    border: none;
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.lightbox-close:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.lightbox-title {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 12px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<section class="gallery-header">
+    <div data-aos="fade-down">
+        <div class="header-badge">
+            <span>📸</span>
+            <span>गाव दर्शन व विकास कामे</span>
+        </div>
+        <h1>फोटो व उपक्रम गॅलरी</h1>
+        <p>
+            ग्रामपंचायत तऱ्हाडी त.त. अंतर्गत राबवण्यात आलेले विकास प्रकल्प, ग्रामसभा, शासकीय उपक्रम आणि गावची निसर्गरम्य दृश्ये.
+        </p>
+    </div>
+</section>
+
+<div class="page-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" data-aos="fade-right">
+        <a href="/">मुख्यपृष्ठ</a>
+        <span>›</span>
+        <span>फोटो गॅलरी</span>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="gallery-grid">
+        <!-- Always include authentic Gram Panchayat image -->
+        <div class="gallery-item card-tilt" data-aos="fade-up" onclick="openLightbox('{% static 'images/GPTTT.png' %}', 'ग्रामपंचायत तऱ्हाडी त.त. मुख्य इमारत')">
+            <div class="gallery-thumb-wrap">
+                <img src="{% static 'images/GPTTT.png' %}" alt="ग्रामपंचायत तऱ्हाडी त.त. इमारत" loading="lazy">
+                <span class="gallery-overlay-badge">कार्यालय इमारत</span>
+            </div>
+            <div class="gallery-caption">
+                <h3>ग्रामपंचायत कार्यालय, तऱ्हाडी त.त.</h3>
+                <p>तालुका शिरपूर, जिल्हा धुळे — नवीन आधुनिक ग्रामपंचायत प्रशासकीय इमारत व परिसर.</p>
+            </div>
+        </div>
+
+        {% for img in images %}
+        <div class="gallery-item card-tilt" data-aos="fade-up" onclick="openLightbox('{{ img.image.url }}', '{{ img.title }}')">
+            <div class="gallery-thumb-wrap">
+                <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy">
+                <span class="gallery-overlay-badge">विकास काम</span>
+            </div>
+            <div class="gallery-caption">
+                <h3>{{ img.title }}</h3>
+                {% if img.description %}<p>{{ img.description }}</p>{% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+        <img id="lightboxImg" src="" alt="">
+        <div class="lightbox-title" id="lightboxTitle"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openLightbox(src, title) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightboxTitle').innerText = title || '';
+    document.getElementById('lightbox').classList.add('active');
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+});
+</script>
+{% endblock %}

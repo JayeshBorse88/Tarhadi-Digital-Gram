@@ -1,0 +1,343 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block nav_about %}active{% endblock %}
+{% block title %}गावाबद्दल माहिती | ग्रामपंचायत तऱ्हाडी त.त., ता. शिरपूर{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== ABOUT HEADER ===== */
+.about-header {
+    background: linear-gradient(135deg, var(--forest-green-dark) 0%, var(--forest-green) 100%);
+    color: #ffffff;
+    padding: 55px 5% 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: var(--cream-bg);
+    border-radius: 50% 50% 0 0;
+}
+
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #f7dfa5;
+    padding: 6px 18px;
+    border-radius: var(--radius-pill);
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    backdrop-filter: blur(4px);
+}
+
+.about-header h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.about-header p {
+    font-size: 16px;
+    color: #d1e7da;
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* About Hero Grid */
+.about-hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 36px;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.about-hero-image-wrap {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: 3px solid #ffffff;
+    position: relative;
+}
+
+.about-hero-image-wrap img {
+    width: 100%;
+    height: 340px;
+    object-fit: cover;
+    display: block;
+}
+
+.about-caption {
+    padding: 14px 20px;
+    background: #ffffff;
+    border-top: 1px solid var(--border-subtle);
+    font-size: 13.5px;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.about-hero-text h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+    margin-bottom: 14px;
+    line-height: 1.35;
+}
+
+.about-hero-text p {
+    font-size: 15px;
+    color: var(--text-main);
+    line-height: 1.85;
+    margin-bottom: 16px;
+}
+
+.geo-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.geo-pill {
+    background: var(--cream-surface);
+    border: 1px solid var(--border-subtle);
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--forest-green-dark);
+}
+
+/* Village Statistics / Info Grid */
+.info-section {
+    margin-bottom: 55px;
+}
+
+.info-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.info-card-box {
+    background: var(--card-white);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 22px;
+    box-shadow: var(--shadow-card);
+    border-left: 4px solid var(--forest-green);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info-card-box:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+
+.info-card-box .label {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.info-card-box .val {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+}
+
+/* Panchayat Leadership Section */
+.panchayat-section {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 40px;
+}
+
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+    margin-top: 22px;
+}
+
+.member-card {
+    background: var(--cream-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.2s ease;
+}
+
+.member-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--forest-green);
+}
+
+.member-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--agri-green-pale);
+    color: var(--forest-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.member-info h4 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+    margin-bottom: 3px;
+}
+
+.member-info p {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.member-info a {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--forest-green);
+    text-decoration: none;
+}
+
+.member-info a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 850px) {
+    .about-hero-grid { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<section class="about-header">
+    <div data-aos="fade-down">
+        <div class="header-badge">
+            <span>🏡</span>
+            <span>तऱ्हाडी त.त. — ग्राम परिचय</span>
+        </div>
+        <h1>गावाबद्दल व ग्रामपंचायत परिचय</h1>
+        <p>
+            खानदेशातील समृद्ध संस्कृती, कृषी परंपरा आणि विकासाच्या दिशेने वाटचाल करणारे ग्रामपंचायत तऱ्हाडी त.त., तालुका शिरपूर, जिल्हा धुळे.
+        </p>
+    </div>
+</section>
+
+<div class="page-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" data-aos="fade-right">
+        <a href="/">मुख्यपृष्ठ</a>
+        <span>›</span>
+        <span>गावाबद्दल</span>
+    </div>
+
+    <!-- About Hero Grid -->
+    <div class="about-hero-grid">
+        <div class="about-hero-image-wrap card-tilt" data-aos="fade-right">
+            <img src="{% static 'images/GPTTT.png' %}" alt="ग्रामपंचायत तऱ्हाडी त.त. इमारत">
+            <div class="about-caption">
+                <strong>ग्रामपंचायत कार्यालय तऱ्हाडी त.त.</strong>
+                <span class="badge badge-green">शिरपूर तालुका</span>
+            </div>
+        </div>
+
+        <div class="about-hero-text" data-aos="fade-left">
+            <div class="section-eyebrow">ऐतिहासिक व भौगोलिक ओळख</div>
+            <h2>तऱ्हाडी त.त. — एक आदर्श ग्रामीण परिसंस्था</h2>
+            <p>
+                तऱ्हाडी त.त. हे उत्तर महाराष्ट्रातील धुळे जिल्ह्याच्या शिरपूर तालुक्यातील एक प्रगतिशील व स्वाभिमानी गाव आहे.
+                गावामध्ये शेती हा मुख्य व्यवसाय असून कापूस, मका, केळी, पपई व तृणधान्यांचे विपुल उत्पादन घेतले जाते.
+            </p>
+            <p>
+                ग्रामपंचायत तऱ्हाडी त.त. द्वारे गावच्या सर्वांगीण विकासासाठी रस्ते, शुद्ध पाणीपुरवठा, डिजिटल नागरी सेवा,
+                स्वच्छता मोहीम आणि सौर ऊर्जा योजनांची प्रभावी अंमलबजावणी केली जात आहे.
+            </p>
+
+            <div class="geo-pills">
+                <span class="geo-pill">📍 तालुका: शिरपूर</span>
+                <span class="geo-pill">🏛️ जिल्हा: धुळे</span>
+                <span class="geo-pill">🇮🇳 राज्य: महाराष्ट्र</span>
+                <span class="geo-pill">📮 पिनकोड: ४२५४०५</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Village Info Items (from DB) -->
+    {% if info_items %}
+    <section class="info-section" data-aos="fade-up">
+        <div class="section-eyebrow">सांख्यिकी व माहिती</div>
+        <h2 class="section-title">गावची ठळक वैशिष्ट्ये</h2>
+        <p class="section-desc">ग्रामपंचायत दप्तरी नोंदणीकृत गावची लोकसंख्या, क्षेत्रफळ आणि प्रशासकीय तपशील.</p>
+
+        <div class="info-cards-grid">
+            {% for item in info_items %}
+            <div class="info-card-box card-tilt">
+                <div class="label">{{ item.label }}</div>
+                <div class="val">{{ item.value }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Panchayat Members & Officials (from DB) -->
+    {% if contacts %}
+    <section class="panchayat-section" data-aos="fade-up">
+        <div class="section-eyebrow">गाव नेतृत्व</div>
+        <h2 style="font-size:24px;font-weight:800;color:var(--forest-green-dark);margin-top:6px;">
+            ग्रामपंचायत पदाधिकारी व शासकीय अधिकारी
+        </h2>
+        <p style="font-size:14px;color:var(--text-muted);margin-top:4px;">
+            गावच्या विकासात आणि नागरिकांच्या सेवेत तत्पर असणारे प्रतिनिधी.
+        </p>
+
+        <div class="members-grid">
+            {% for c in contacts %}
+            <div class="member-card card-tilt">
+                <div class="member-icon">👤</div>
+                <div class="member-info">
+                    <h4>{{ c.name }}</h4>
+                    <p>{{ c.designation }}</p>
+                    <a href="tel:{{ c.phone }}">📞 {{ c.phone }}</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

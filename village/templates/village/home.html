@@ -1,0 +1,918 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block nav_home %}active{% endblock %}
+{% block title %}तऱ्हाडी डिजिटल ग्राम | ग्रामपंचायत तऱ्हाडी त.त. — मुख्यपृष्ठ{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== 1. AUTHENTIC VILLAGE HERO SECTION ===== */
+.village-hero {
+    position: relative;
+    background: linear-gradient(135deg, rgba(14, 71, 42, 0.95) 0%, rgba(9, 48, 28, 0.92) 100%),
+                url("{% static 'images/GPTTT.png' %}") center/cover no-repeat;
+    color: #ffffff;
+    padding: 70px 5% 90px;
+    overflow: hidden;
+}
+
+.hero-inner {
+    max-width: 1280px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1.15fr 0.95fr;
+    gap: 48px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #f7dfa5;
+    padding: 6px 18px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    backdrop-filter: blur(4px);
+}
+
+.hero-title {
+    font-size: clamp(32px, 4.4vw, 52px);
+    font-weight: 800;
+    line-height: 1.22;
+    letter-spacing: -0.015em;
+    color: #ffffff;
+    margin-bottom: 14px;
+}
+
+.hero-title span {
+    color: #ffda6a;
+}
+
+.hero-subtitle {
+    font-size: clamp(17px, 2vw, 22px);
+    color: #e2f0e7;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.hero-desc {
+    font-size: 15.5px;
+    color: #c5ded0;
+    line-height: 1.8;
+    max-width: 580px;
+    margin-bottom: 32px;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.hero-btn-primary {
+    background: var(--gold-accent);
+    color: #ffffff;
+    padding: 14px 30px;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 16px rgba(200, 130, 12, 0.35);
+}
+
+.hero-btn-primary:hover {
+    background: var(--gold-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(200, 130, 12, 0.45);
+}
+
+.hero-btn-secondary {
+    background: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    padding: 14px 28px;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(6px);
+    transition: all 0.2s ease;
+}
+
+.hero-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Hero Showcase Card */
+.hero-visual-card {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.hero-visual-card:hover {
+    transform: translateY(-4px);
+}
+
+.hero-visual-card img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    display: block;
+}
+
+.hero-visual-caption {
+    padding: 16px 22px;
+    background: #ffffff;
+    color: var(--text-main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hero-visual-caption h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--forest-green);
+    margin-bottom: 2px;
+}
+
+.hero-visual-caption p {
+    font-size: 12.5px;
+    color: var(--text-muted);
+}
+
+/* ===== 2. LIVE GP COMPLAINT STATUS DASHBOARD ===== */
+.stats-banner-wrap {
+    max-width: 1200px;
+    margin: -45px auto 40px;
+    padding: 0 5%;
+    position: relative;
+    z-index: 10;
+}
+
+.stats-grid {
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 30px rgba(14, 71, 42, 0.08);
+    border: 1px solid var(--border-subtle);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    overflow: hidden;
+}
+
+.stat-box {
+    padding: 24px 20px;
+    text-align: center;
+    border-right: 1px solid var(--border-subtle);
+    position: relative;
+}
+
+.stat-box:last-child { border-right: none; }
+
+.stat-number {
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.1;
+    font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif;
+}
+
+.stat-title {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+/* ===== 3. NOTICE BOARD ===== */
+.notice-section {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-left: 6px solid var(--gold-accent);
+    border-radius: var(--radius-md);
+    padding: 28px 32px;
+    margin-bottom: 50px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.notice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    border-bottom: 2px solid var(--cream-surface);
+    padding-bottom: 14px;
+}
+
+.notice-header h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notice-badge-live {
+    background: #fee2e2;
+    color: #991b1b;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.notice-badge-live::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: #dc2626;
+    border-radius: 50%;
+    animation: livePulse 1.5s infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.3); }
+}
+
+.notice-list {
+    display: grid;
+    gap: 16px;
+}
+
+.notice-card-item {
+    padding: 14px 18px;
+    background: var(--cream-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.notice-card-item:hover {
+    transform: translateX(4px);
+    border-color: var(--forest-green);
+}
+
+.notice-card-item h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--forest-green);
+    margin-bottom: 4px;
+}
+
+.notice-card-item p {
+    font-size: 14px;
+    color: var(--text-main);
+    line-height: 1.7;
+}
+
+.notice-card-date {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+/* ===== 4. QUICK CITIZEN SERVICES GRID ===== */
+.services-section {
+    margin-bottom: 55px;
+}
+
+.service-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.service-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 26px 20px;
+    text-decoration: none;
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-subtle);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    position: relative;
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--forest-green);
+}
+
+.service-card .icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: var(--agri-green-pale);
+    color: var(--forest-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 16px;
+    transition: transform 0.2s ease;
+}
+
+.service-card:hover .icon-box {
+    transform: scale(1.1);
+}
+
+.service-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--forest-green-dark);
+    margin-bottom: 8px;
+}
+
+.service-card p {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+    flex-grow: 1;
+}
+
+.service-card .action-link {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--forest-green);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ===== 5. SCHEMES & FARMER SPLIT SECTION ===== */
+.schemes-split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 55px;
+}
+
+.split-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+}
+
+.split-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.split-card-header .header-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+}
+
+.split-card-header h3 {
+    font-size: 21px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+}
+
+.split-card p {
+    font-size: 14.5px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 22px;
+}
+
+.split-list {
+    list-style: none;
+    margin-bottom: 26px;
+}
+
+.split-list li {
+    padding: 9px 0;
+    border-bottom: 1px dashed var(--border-subtle);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.split-list li:last-child { border-bottom: none; }
+.split-list li span { color: var(--forest-green); font-size: 16px; }
+
+/* ===== 6. VILLAGE HIGHLIGHTS SECTION ===== */
+.village-facts-card {
+    background: linear-gradient(135deg, var(--forest-green), #166534);
+    color: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    margin-bottom: 50px;
+    box-shadow: var(--shadow-card);
+}
+
+.facts-header {
+    text-align: center;
+    max-width: 650px;
+    margin: 0 auto 30px;
+}
+
+.facts-header h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.facts-header p {
+    color: #d8e8de;
+    font-size: 14.5px;
+}
+
+.facts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.fact-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-align: center;
+    backdrop-filter: blur(6px);
+}
+
+.fact-item h4 {
+    font-size: 13px;
+    color: #f7dfa5;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.fact-item p {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+/* ===== 7. EMERGENCY HELPLINE BANNER ===== */
+.emergency-banner {
+    background: #fff;
+    border: 2px solid #fecaca;
+    border-radius: var(--radius-md);
+    padding: 26px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.emergency-banner-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.emergency-banner-header h3 {
+    font-size: 19px;
+    font-weight: 800;
+    color: #991b1b;
+}
+
+.helpline-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.helpline-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #991b1b;
+    transition: all 0.2s ease;
+}
+
+.helpline-btn:hover {
+    background: #fee2e2;
+    transform: translateY(-2px);
+    border-color: #f87171;
+}
+
+.helpline-btn .h-icon {
+    font-size: 22px;
+}
+
+.helpline-btn h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.helpline-btn span {
+    font-size: 14px;
+    font-weight: 800;
+    color: #b91c1c;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+    .hero-inner { grid-template-columns: 1fr; text-align: center; }
+    .hero-buttons { justify-content: center; }
+    .hero-desc { margin-left: auto; margin-right: auto; }
+    .service-cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .schemes-split-grid { grid-template-columns: 1fr; }
+    .facts-grid { grid-template-columns: repeat(2, 1fr); }
+    .helpline-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 650px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .service-cards-grid { grid-template-columns: 1fr; }
+    .facts-grid { grid-template-columns: 1fr; }
+    .helpline-grid { grid-template-columns: 1fr; }
+    .village-hero { padding: 40px 5% 70px; }
+    .hero-visual-card img { height: 220px; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 1. AUTHENTIC VILLAGE HERO SECTION -->
+<section class="village-hero">
+    <div class="hero-inner">
+        <!-- Hero Text (Exact User Requirements) -->
+        <div data-aos="fade-right">
+            <div class="hero-tag">
+                <span>🌱</span>
+                <span>आपल्या गावाची, आपल्या सेवेसाठी...</span>
+            </div>
+
+            <h1 class="hero-title">
+                तऱ्हाडी <span>डिजिटल ग्राम</span>
+            </h1>
+
+            <div class="hero-subtitle">
+                गावातील सर्व सेवा आता एका क्लिकवर!
+            </div>
+
+            <p class="hero-desc">
+                ग्रामपंचायत तऱ्हाडी त.त. (ता. शिरपूर, जि. धुळे) च्या अधिकृत डिजिटल सेवा पोर्टलवर आपले सहर्ष स्वागत आहे. शासकीय योजना, शेतकरी अनुदान, नागरी दाखले आणि तक्रार निवारण आता थेट आपल्या मोबाईवर उपलब्ध.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="#quick-services" class="hero-btn-primary">
+                    <span>🏛️ सेवा पाहा</span>
+                    <span>↓</span>
+                </a>
+                <a href="/about/" class="hero-btn-secondary">
+                    <span>🏡 गावाची माहिती</span>
+                    <span>→</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Authentic Village Building Visual Card -->
+        <div data-aos="fade-left">
+            <div class="hero-visual-card card-tilt">
+                <img src="{% static 'images/GPTTT.png' %}" alt="ग्रामपंचायत तऱ्हाडी त.त. इमारत">
+                <div class="hero-visual-caption">
+                    <div>
+                        <h3>ग्रामपंचायत कार्यालय, तऱ्हाडी त.त.</h3>
+                        <p>तालुका शिरपूर • जिल्हा धुळे • महाराष्ट्र शासन</p>
+                    </div>
+                    <span class="badge badge-green">सक्रिय कार्यालय</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2. LIVE GP COMPLAINT STATUS DASHBOARD (Actual DB Data) -->
+<div class="stats-banner-wrap">
+    <div class="stats-grid" data-aos="fade-up">
+        <div class="stat-box">
+            <div class="stat-number" style="color:var(--forest-green);" data-target="{{ total_complaints }}">{{ total_complaints }}</div>
+            <div class="stat-title">एकूण तक्रारी नोंद</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" style="color:#b45309;" data-target="{{ pending_complaints }}">{{ pending_complaints }}</div>
+            <div class="stat-title">प्रलंबित समस्या</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" style="color:#1d4ed8;" data-target="{{ in_progress_complaints }}">{{ in_progress_complaints }}</div>
+            <div class="stat-title">प्रगतीत कामे</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" style="color:#15803d;" data-target="{{ resolved_complaints }}">{{ resolved_complaints }}</div>
+            <div class="stat-title">निराकरण झालेल्या</div>
+        </div>
+    </div>
+</div>
+
+<div class="page-container">
+    <!-- 3. OFFICIAL NOTICE BOARD (Actual DB Notices) -->
+    {% if notices %}
+    <section class="notice-section" data-aos="fade-up">
+        <div class="notice-header">
+            <h2>
+                <span>📢</span>
+                <span>ग्रामपंचायत सूचना फलक</span>
+            </h2>
+            <div class="notice-badge-live">नवीन सूचना</div>
+        </div>
+        <div class="notice-list">
+            {% for notice in notices %}
+            <div class="notice-card-item">
+                <h3>{{ notice.title }}</h3>
+                <p>{{ notice.message }}</p>
+                <div class="notice-card-date">
+                    📅 प्रसिद्ध दिनांक: {{ notice.created_at|date:"d F Y, h:i A" }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- 4. QUICK VILLAGE CITIZEN SERVICES SECTION -->
+    <section class="services-section" id="quick-services">
+        <div class="section-eyebrow">ग्रामपंचायत सेवा</div>
+        <h2 class="section-title">नागरिकांसाठी प्रमुख डिजिटल सेवा</h2>
+        <p class="section-desc">
+            गावातील नागरिकांच्या सोयीसाठी ग्रामपंचायतीचे सर्व दाखले, कर आकारणी व तक्रार निवारण सेवांची संपूर्ण माहिती.
+        </p>
+
+        <div class="service-cards-grid">
+            <a class="service-card card-tilt" href="/gramseva/#birth" data-aos="fade-up" data-aos-delay="50">
+                <div class="icon-box">👶</div>
+                <h3>जन्म व मृत्यू दाखले</h3>
+                <p>नोंदणी प्रक्रिया, आवश्यक कागदपत्रे व दाखला मिळवण्याचा कालावधी.</p>
+                <div class="action-link">माहिती पाहा →</div>
+            </a>
+
+            <a class="service-card card-tilt" href="/gramseva/#residence" data-aos="fade-up" data-aos-delay="100">
+                <div class="icon-box">🏡</div>
+                <h3>रहिवासी दाखला</h3>
+                <p>शालेय, शासकीय व बँक कामांसाठी आवश्यक रहिवासी प्रमाणपत्र.</p>
+                <div class="action-link">माहिती पाहा →</div>
+            </a>
+
+            <a class="service-card card-tilt" href="/gramseva/#property_tax" data-aos="fade-up" data-aos-delay="150">
+                <div class="icon-box">🏠</div>
+                <h3>घरपट्टी व पाणीपट्टी</h3>
+                <p>वार्षिक कर आकारणी, नमुना ८ उतारा व अधिकृत शासकीय पावती तपशील.</p>
+                <div class="action-link">माहिती पाहा →</div>
+            </a>
+
+            <a class="service-card card-tilt" href="/complaints/" data-aos="fade-up" data-aos-delay="200">
+                <div class="icon-box">📝</div>
+                <h3>ऑनलाइन तक्रार नोंदवा</h3>
+                <p>पाणी, रस्ता, वीज, स्वच्छता या समस्यांची तक्रार डिजिटल नोंदवा.</p>
+                <div class="action-link" style="color:#b91c1c;">तक्रार नोंदवा ↗</div>
+            </a>
+
+            <a class="service-card card-tilt" href="/takrar-status/" data-aos="fade-up" data-aos-delay="250">
+                <div class="icon-box">🔍</div>
+                <h3>तक्रार स्थिती तपासा</h3>
+                <p>आपल्या Complaint ID द्वारे समस्येवरील कारवाईची स्थिती तपासा.</p>
+                <div class="action-link">स्थिती शोधा →</div>
+            </a>
+
+            <a class="service-card card-tilt" href="/schemes/" data-aos="fade-up" data-aos-delay="300">
+                <div class="icon-box">🏛️</div>
+                <h3>शासकीय योजना</h3>
+                <p>केंद्र व महाराष्ट्र शासनाच्या विविध योजना, पात्रता व थेट अर्ज लिंक्स.</p>
+                <div class="action-link">योजना शोधा →</div>
+            </a>
+
+            <a class="service-card card-tilt" href="/shetkari-yojana/" data-aos="fade-up" data-aos-delay="350">
+                <div class="icon-box">🌾</div>
+                <h3>शेतकरी योजना</h3>
+                <p>पीक विमा, ठिबक सिंचन, कृषी औजारे अनुदान व हवामान सल्ला.</p>
+                <div class="action-link">शेतकरी विभाग →</div>
+            </a>
+
+            <a class="service-card card-tilt" href="/contacts/" data-aos="fade-up" data-aos-delay="400">
+                <div class="icon-box">📞</div>
+                <h3>महत्त्वाचे संपर्क</h3>
+                <p>सरपंच, ग्रामसेवक, तलाठी, कृषी सहाय्यक व आपत्कालीन क्रमांक.</p>
+                <div class="action-link">संपर्क यादी →</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- 5. SCHEMES & FARMERS SPLIT SECTION -->
+    <div class="schemes-split-grid">
+        <!-- Farmer Schemes Card -->
+        <div class="split-card" data-aos="fade-up">
+            <div class="split-card-header">
+                <div class="header-icon" style="background:#eaf6ee;color:#15803d;">🌾</div>
+                <div>
+                    <span class="badge badge-green">कृषी विभाग</span>
+                    <h3>शेतकरी बांधवांसाठी योजना</h3>
+                </div>
+            </div>
+            <p>
+                तऱ्हाडी गावातील शेतकरी बांधवांसाठी पीक विमा, सिंचन अनुदान, बी-बियाणे आणि अवजारे खरेदीवरील शासकीय अनुदानाची अद्ययावत माहिती.
+            </p>
+            <ul class="split-list">
+                <li><span>✓</span> प्रधानमंत्री पीक विमा योजना (१ रुपयात संरक्षण)</li>
+                <li><span>✓</span> ठिबक व तुषार सिंचन अनुदान (८०% पर्यंत सबसिडी)</li>
+                <li><span>✓</span> नमो शेतकरी महासन्मान निधी + PM-Kisan (वार्षिक ₹१२,०००)</li>
+                <li><span>✓</span> ट्रॅक्टर व कृषी अवजारे यांत्रिकीकरण योजना</li>
+            </ul>
+            <a href="/shetkari-yojana/" class="btn btn-forest" style="margin-top:auto;">
+                सर्व शेतकरी योजना पहा →
+            </a>
+        </div>
+
+        <!-- Government Schemes Card -->
+        <div class="split-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="split-card-header">
+                <div class="header-icon" style="background:#fef3c7;color:#92400e;">🏛️</div>
+                <div>
+                    <span class="badge badge-gold">शासकीय योजना</span>
+                    <h3>केंद्र व राज्य शासन योजना</h3>
+                </div>
+            </div>
+            <p>
+                सर्वसामान्य नागरिक, महिला, वृद्ध आणि विद्यार्थ्यांसाठी उपलब्ध असलेल्या महत्त्वाच्या योजनांची पात्रता व थेट ऑनलाइन अर्जाची माहिती.
+            </p>
+            <ul class="split-list">
+                <li><span>✓</span> प्रधानमंत्री आवास योजना - ग्रामीण (घरकुल ₹१.२० लाख)</li>
+                <li><span>✓</span> आयुष्मान भारत कार्ड (वार्षिक ₹५ लाखांपर्यंत मोफत उपचार)</li>
+                <li><span>✓</span> लेक लाडकी योजना (मुलींच्या भविष्यासाठी ₹१,०१,०००)</li>
+                <li><span>✓</span> संजय गांधी निराधार पेन्शन योजना (दरमहा ₹१,५००)</li>
+            </ul>
+            <a href="/schemes/" class="btn btn-gold" style="margin-top:auto;">
+                सर्व सरकारी योजना पहा →
+            </a>
+        </div>
+    </div>
+
+    <!-- 6. VILLAGE HIGHLIGHTS & INFO SECTION -->
+    <section class="village-facts-card" data-aos="fade-up">
+        <div class="facts-header">
+            <h2>🏡 आमचे गाव: तऱ्हाडी त.त.</h2>
+            <p>
+                शिरपूर तालुक्यातील तापी-अनेर खोऱ्यातील कृषीसमृद्ध आणि प्रगतीशील गाव. गावातील प्रमुख प्रशासकीय व भौगोलिक माहिती खालीलप्रमाणे आहे.
+            </p>
+        </div>
+
+        <div class="facts-grid">
+            <div class="fact-item">
+                <h4>तालुका व जिल्हा</h4>
+                <p>शिरपूर, धुळे</p>
+            </div>
+            <div class="fact-item">
+                <h4>पिन कोड</h4>
+                <p>४२५४०५</p>
+            </div>
+            <div class="fact-item">
+                <h4>अंदाजे लोकसंख्या</h4>
+                <p>२,५००+</p>
+            </div>
+            <div class="fact-item">
+                <h4>प्रमुख पिके</h4>
+                <p>कापूस, मका, केळी</p>
+            </div>
+        </div>
+
+        <div style="text-align:center;margin-top:24px;">
+            <a href="/about/" class="btn" style="background:#fff;color:var(--forest-green);font-weight:700;">
+                गावाची संपूर्ण माहिती व इतिहास वाचा →
+            </a>
+        </div>
+    </section>
+
+    <!-- 7. EMERGENCY HELPLINES QUICK BAR -->
+    <section class="emergency-banner" data-aos="fade-up">
+        <div class="emergency-banner-header">
+            <span style="font-size:24px;">🚨</span>
+            <div>
+                <h3>आपत्कालीन हेल्पलाईन क्रमांक (२४ तास सुरू)</h3>
+                <p style="font-size:13px;color:var(--text-muted);">कोणत्याही संकटसमयी खालील क्रमांकावर त्वरित संपर्क साधा.</p>
+            </div>
+        </div>
+
+        <div class="helpline-grid">
+            <a href="tel:108" class="helpline-btn">
+                <span class="h-icon">🚑</span>
+                <div>
+                    <h4>रुग्णवाहिका</h4>
+                    <span>१०८</span>
+                </div>
+            </a>
+
+            <a href="tel:02563255100" class="helpline-btn">
+                <span class="h-icon">👮</span>
+                <div>
+                    <h4>शिरपूर पोलीस स्टेशन</h4>
+                    <span>०२५६३-२५५१००</span>
+                </div>
+            </a>
+
+            <a href="tel:18002123435" class="helpline-btn">
+                <span class="h-icon">⚡</span>
+                <div>
+                    <h4>महावितरण वीज तक्रार</h4>
+                    <span>१८००-२१२-३४३५</span>
+                </div>
+            </a>
+
+            <a href="tel:101" class="helpline-btn">
+                <span class="h-icon">🚒</span>
+                <div>
+                    <h4>अग्निशामक दल</h4>
+                    <span>१०१</span>
+                </div>
+            </a>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Number Count-Up Animation for Stats Dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    var statNumbers = document.querySelectorAll('.stat-number');
+    if (!statNumbers.length) return;
+
+    function animateValue(obj, start, end, duration) {
+        var startTimestamp = null;
+        var step = function(timestamp) {
+            if (!startTimestamp) startTimestamp = timestamp;
+            var progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            obj.innerHTML = Math.floor(progress * (end - start) + start);
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                obj.innerHTML = end;
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+
+    if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    var target = parseInt(entry.target.getAttribute('data-target') || entry.target.innerText, 10);
+                    if (!isNaN(target)) {
+                        animateValue(entry.target, 0, target, 1000);
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        statNumbers.forEach(function(el) { observer.observe(el); });
+    }
+});
+</script>
+{% endblock %}

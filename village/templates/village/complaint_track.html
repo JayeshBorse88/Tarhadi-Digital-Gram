@@ -1,0 +1,323 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block nav_track %}active{% endblock %}
+{% block title %}तक्रार स्थिती ट्रॅकिंग | ग्रामपंचायत तऱ्हाडी त.त.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== TRACK HEADER ===== */
+.track-header {
+    background: linear-gradient(135deg, var(--forest-green-dark) 0%, var(--forest-green) 100%);
+    color: #ffffff;
+    padding: 55px 5% 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.track-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: var(--cream-bg);
+    border-radius: 50% 50% 0 0;
+}
+
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #f7dfa5;
+    padding: 6px 18px;
+    border-radius: var(--radius-pill);
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    backdrop-filter: blur(4px);
+}
+
+.track-header h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.track-header p {
+    font-size: 16px;
+    color: #d1e7da;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* Form Card */
+.track-card {
+    background: var(--card-white);
+    max-width: 680px;
+    margin: -25px auto 40px;
+    padding: 36px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-subtle);
+    position: relative;
+    z-index: 10;
+}
+
+.track-card-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--forest-green-dark);
+    margin-bottom: 8px;
+}
+
+.track-card-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+/* Alert */
+.alert-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    padding: 14px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Tracking Result Card */
+.result-box {
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    border-radius: var(--radius-md);
+    padding: 26px;
+    margin-top: 30px;
+}
+
+.result-box h3 {
+    color: var(--forest-green-dark);
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Progress Tracker Bar */
+.status-tracker {
+    display: flex;
+    justify-content: space-between;
+    margin: 24px 0 26px;
+    position: relative;
+}
+
+.status-tracker::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 10%;
+    right: 10%;
+    height: 4px;
+    background: #e2e8f0;
+    z-index: 1;
+}
+
+.track-step {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 32%;
+}
+
+.track-step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.track-step.active .track-step-circle {
+    background: var(--forest-green);
+    box-shadow: 0 0 0 4px rgba(14, 71, 42, 0.2);
+}
+
+.track-step.completed .track-step-circle {
+    background: #15803d;
+}
+
+.track-step-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.track-step.active .track-step-label {
+    color: var(--forest-green-dark);
+}
+
+/* Result Table */
+.result-table {
+    background: #ffffff;
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    border: 1px solid var(--border-subtle);
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 9px 0;
+    font-size: 14px;
+    border-bottom: 1px dashed var(--border-subtle);
+}
+
+.result-row:last-child { border-bottom: none; }
+.result-row strong { color: var(--forest-green-dark); }
+.result-row span { color: var(--text-main); font-weight: 600; text-align: right; max-width: 60%; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<section class="track-header">
+    <div data-aos="fade-down">
+        <div class="header-badge">
+            <span>🔍</span>
+            <span>तक्रार स्थिती ट्रॅकिंग प्रणाली</span>
+        </div>
+        <h1>तक्रार स्थिती तपासा</h1>
+        <p>
+            आपल्या तक्रारीवर ग्रामपंचायत प्रशासनाने केलेली कार्यवाही, सद्यस्थिती आणि तपासणी अहवाल ऑनलाइन तपासा.
+        </p>
+    </div>
+</section>
+
+<div class="page-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" data-aos="fade-right">
+        <a href="/">मुख्यपृष्ठ</a>
+        <span>›</span>
+        <span>तक्रार स्थिती</span>
+    </div>
+
+    <!-- Main Card -->
+    <div class="track-card card-tilt" data-aos="fade-up">
+        <h2 class="track-card-title">तक्रार शोधा</h2>
+        <p class="track-card-subtitle">
+            तक्रार नोंदवताना प्राप्त झालेला १२ अंकी Complaint ID व नोंदणीकृत १० अंकी मोबाइल नंबर खाली भरा.
+        </p>
+
+        {% if error %}
+        <div class="alert-box">
+            <span>⚠️ {{ error }}</span>
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'complaint_track' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label" for="complaint_id">Complaint ID *</label>
+                <input class="form-input" id="complaint_id" name="complaint_id" type="text" maxlength="12" placeholder="उदा. 4A8B2C9D1E3F" autocomplete="off" required style="text-transform:uppercase;">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="mobile">१० अंकी मोबाइल नंबर *</label>
+                <input class="form-input" id="mobile" name="mobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="नोंदणीकृत १० अंकी मोबाइल नंबर" required>
+            </div>
+
+            <button type="submit" class="btn btn-forest btn-block" style="padding:14px;font-size:16px;">
+                <span>🔍 तक्रार सद्यस्थिती शोधा</span>
+            </button>
+        </form>
+
+        {% if result %}
+        <div class="result-box" data-aos="zoom-in">
+            <h3>
+                <span>📋</span>
+                <span>तक्रार सद्यस्थिती अहवाल</span>
+            </h3>
+
+            <!-- Visual Step Tracker -->
+            <div class="status-tracker">
+                <div class="track-step {% if result.status == 'Pending' or result.status == 'In Progress' or result.status == 'Resolved' %}completed active{% endif %}">
+                    <div class="track-step-circle">1</div>
+                    <div class="track-step-label">तक्रार नोंद झाली</div>
+                </div>
+
+                <div class="track-step {% if result.status == 'In Progress' %}active{% elif result.status == 'Resolved' %}completed active{% endif %}">
+                    <div class="track-step-circle">2</div>
+                    <div class="track-step-label">चौकशी प्रगतीत</div>
+                </div>
+
+                <div class="track-step {% if result.status == 'Resolved' %}completed active{% endif %}">
+                    <div class="track-step-circle">3</div>
+                    <div class="track-step-label">समस्या निवारण</div>
+                </div>
+            </div>
+
+            <!-- Details Table -->
+            <div class="result-table">
+                <div class="result-row">
+                    <strong>Complaint ID:</strong>
+                    <span style="font-family:monospace;letter-spacing:1px;color:var(--forest-green-dark);">{{ result.complaint_id }}</span>
+                </div>
+                <div class="result-row">
+                    <strong>तक्रारदाराचे नाव:</strong>
+                    <span>{{ result.name }}</span>
+                </div>
+                <div class="result-row">
+                    <strong>समस्येचा प्रकार:</strong>
+                    <span>{{ result.get_category_display }}</span>
+                </div>
+                <div class="result-row">
+                    <strong>समस्येचे विवरण:</strong>
+                    <span>{{ result.description }}</span>
+                </div>
+                <div class="result-row">
+                    <strong>सध्याची स्थिती:</strong>
+                    <span>
+                        {% if result.status == 'Pending' %}
+                            <span class="badge badge-gold">प्रलंबित (Pending)</span>
+                        {% elif result.status == 'In Progress' %}
+                            <span class="badge badge-blue">प्रगतीत (In Progress)</span>
+                        {% else %}
+                            <span class="badge badge-green">निराकरण झाले (Resolved)</span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="result-row">
+                    <strong>नोंदणी दिनांक:</strong>
+                    <span>{{ result.created_at|date:"d-m-Y, h:i A" }}</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div style="text-align:center;margin-top:22px;padding-top:18px;border-top:1px solid var(--border-subtle);">
+            <a href="{% url 'complaint' %}" class="btn btn-outline-forest">
+                <span>+ नवीन तक्रार नोंदवा</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
